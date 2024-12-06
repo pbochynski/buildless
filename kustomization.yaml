@@ -1,0 +1,11 @@
+configMapGenerator:
+  - name: buildless
+    files:
+      - customHtml=ui.html
+      - customScript=dist/buildless.mjs
+      - general=general.yaml
+    options:
+      disableNameSuffixHash: true
+      labels:
+        busola.io/extension: 'resource'
+        busola.io/extension-version: '0.5'

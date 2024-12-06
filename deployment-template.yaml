@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-name
+  labels:
+    app: app-name
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-name
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0 # Allows at most one pod to be unavailable during updates
+      maxSurge: 1 # Allows one additional pod to be created during updates
+  template:
+    metadata:
+      labels:
+        app: app-name
+    spec:
+      containers:
+        - name: nodejs
+          image: node:22-alpine
+          command: ['sh', '-c']
+          args:
+            - |
+              cp /usr/src/app-src/* /usr/src/app/ && \
+              cd /usr/src/app && \
+              npm install && \
+              npm start
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 2 # Adjust based on your app's startup time
+            periodSeconds: 1
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10 # Typically longer than readiness probe
+            periodSeconds: 20
+            timeoutSeconds: 2
+            failureThreshold: 3
+          volumeMounts:
+            - name: nodejs-config-volume
+              mountPath: /usr/src/app-src
+            - name: node-app-volume
+              mountPath: /usr/src/app
+      volumes:
+        - name: nodejs-config-volume
+          configMap:
+            name: app-name
+        - name: node-app-volume
+          emptyDir: {}

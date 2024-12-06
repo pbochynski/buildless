@@ -1,0 +1,25 @@
+{
+  "name": "buildless",
+  "version": "1.0.0",
+  "description": "1. Modify general.yaml section (change scope to 'namespace' or 'cluster', etc. ) 2. Adjust ui.html and script.js files. Remember to keep general.customElement property in sync with the name of the custom element defined in script.js. The script is loaded only only once and general.customElement property is used to determine if the customElement with that name is already defined. 3. Run ./deploy.sh script to deploy the extension to the cluster. It creates a config map with the extension and deploys it to the cluster. You can directly apply the config map with the command: kubectl kustomize . | kubectl apply -n kyma-system -f - 4. run npm start to start the development server.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "vite",
+    "build": "vite build",
+    "deploy": "vite build && kubectl kustomize . | kubectl apply -n kyma-system -f -"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hey-web-components/monaco-editor": "^0.5.1",
+    "@ui5/webcomponents": "^2.4.0",
+    "@ui5/webcomponents-fiori": "^2.5.0",
+    "@ui5/webcomponents-icons": "^2.4.0",
+    "js-yaml": "^4.1.0",
+    "monaco-editor": "^0.52.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.3"
+  }
+}

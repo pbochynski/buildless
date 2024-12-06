@@ -1,0 +1,10 @@
+resource:
+  kind: ConfigMap
+  version: v1
+urlPath: buildless
+category: Workloads
+name: Buildless
+scope: namespace
+customElement: kyma-buildless
+description: >-
+  Kyma Buildless

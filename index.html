@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Busola extension tester</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script type="module">
+      import '@ui5/webcomponents-icons/dist/AllIcons.js';
+      import '@ui5/webcomponents/dist/Title.js';
+      import '@ui5/webcomponents/dist/Input.js';
+      import '@ui5/webcomponents/dist/Select.js';
+      import '@ui5/webcomponents/dist/Option.js';
+      import '@ui5/webcomponents/dist/Panel.js';
+      import '@ui5/webcomponents/dist/Button.js';
+      import '@hey-web-components/monaco-editor';
+      import '@ui5/webcomponents/dist/TabContainer.js';
+      import '@ui5/webcomponents/dist/Tab.js';
+      import '@ui5/webcomponents/dist/TabSeparator.js';
+    </script>
+    <script src="script.js" type="module"></script>
+  </head>
+  <body>
+    <h2>Custom extension</h2>
+    <div id="container"></div>
+
+    <script type="module">
+      fetch('ui.html')
+        .then(response => response.text())
+        .then(text => {
+          document.getElementById('container').innerHTML = text;
+        });
+    </script>
+  </body>
+</html>
