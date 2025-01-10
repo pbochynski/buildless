@@ -5,6 +5,7 @@ import deploymentTemplate from './deployment-template.yaml?raw';
 import serviceTemplate from './service-template.yaml?raw';
 import * as jsYaml from 'js-yaml';
 import { K8sClient } from './k8s-client';
+import cardTemplate from './card-template.html?raw';
 
 function configMap(name, namespace, code, dependencies) {
   const configMap = {
@@ -13,6 +14,10 @@ function configMap(name, namespace, code, dependencies) {
     metadata: {
       name,
       namespace,
+      labels: {
+        'buildless': 'true'
+      }
+
     },
     data: {
       'server.js': code,
@@ -21,6 +26,21 @@ function configMap(name, namespace, code, dependencies) {
   };
   return jsYaml.dump(configMap);
 }
+
+let k8sClient
+
+function getK8sClient() {
+  if (!k8sClient) { 
+    k8sClient = new K8sClient(
+      window.extensionProps?.kymaFetchFn ? '' : '/backend',
+      {},
+      window.extensionProps?.kymaFetchFn,
+    );
+  }
+  return k8sClient;
+}
+
+
 function deployment(name, namespace) {
   const deployment = jsYaml.load(deploymentTemplate);
   deployment.metadata.name = name;
@@ -73,6 +93,38 @@ const templates = [
     port: 3000,
   },
 ];
+function renderBuildlessCard(configMap) {
+  const templ = document.createElement('template');
+  templ.innerHTML = cardTemplate;
+  const card = templ.content.cloneNode(true);
+  const header = card.querySelector('ui5-card-header');
+  header.setAttribute('title-text', `name: ${configMap.metadata.name}`);  
+  header.setAttribute('subtitle-text', `namespace: ${configMap.metadata.namespace}`);
+
+  return card;
+}
+async function getConfigMaps(allNAmespaces = false) {
+  const currentPath = window.location.pathname;
+  const segments = currentPath.split('/')
+  const namespace = segments[segments.length - 2] || 'default'
+
+  const path = allNAmespaces ? '/api/v1/configmaps' : `/api/v1/namespaces/${namespace}/configmaps`
+  let cmaps = await getK8sClient().get(path);
+
+
+  return cmaps.items;
+  
+}
+function refreshCards(cardsContainer) {
+  console.log('Refreshing cards', cardsContainer);
+  cardsContainer.innerHTML = '';
+  getConfigMaps().then(configMaps => {
+    configMaps.forEach(cm => {
+      const card = renderBuildlessCard(cm);
+      cardsContainer.appendChild(card);
+    });
+  });
+}
 
 class KymaBuildless extends HTMLElement {
   connectedCallback() {
@@ -86,13 +138,10 @@ class KymaBuildless extends HTMLElement {
     const useTemplateButton = shadow.getElementById('use-template-button');
     const templateDropdown = shadow.getElementById('template-dropdown');
     console.log('Creating template dropdown');
+    const cardsContainer = shadow.getElementById('buildless-cards');
+    refreshCards(cardsContainer)
 
-    this.k8sClient = new K8sClient(
-      window.extensionProps?.kymaFetchFn ? '' : '/backend',
-      {},
-      window.extensionProps?.kymaFetchFn,
-    );
-    this.k8sClient.get('/api/v1/namespaces').then(namespaces => {
+    getK8sClient().get('/api/v1/namespaces').then(namespaces => {
       const namespaceDropdown = shadow.getElementById('namespace-dropdown');
       namespaceDropdown.innerHTML = '';
       namespaces.items.forEach(ns => {
@@ -139,7 +188,7 @@ class KymaBuildless extends HTMLElement {
       jsYaml.loadAll(shadow.getElementById('deployment-editor').value, doc => {
         if (doc.kind) {
           console.log('Applying:', doc.kind, doc.metadata.name);
-          this.k8sClient.apply(doc);
+          getK8sClient().apply(doc);
         }
       });
     };

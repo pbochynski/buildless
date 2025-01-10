@@ -10,10 +10,6 @@ class K8sClient {
       const fn = (...args) => fetch(...args);
       this.fetch = fn;
     }
-    this.fetchFn = console.log('K8sClient', this.apiPrefix, this.fetch);
-  }
-  setFetchFunction(fetchFunction) {
-    this.fetch = fetchFunction;
   }
   async apply(res) {
     let path = await this.path(res);

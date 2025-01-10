@@ -1,0 +1,14 @@
+.page-header::part(fit-content) {
+    position: static;
+    padding: unset;
+}
+.content,
+.content-group {
+    display: flex;
+    flex-direction: column;
+    padding-block-end: 1rem;
+}
+.content-padding {
+    padding: 0.5rem 1rem 0 1rem;
+    box-sizing: border-box;
+}

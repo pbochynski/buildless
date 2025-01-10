@@ -1,29 +1,46 @@
-<ui5-title style="background-color: white; padding: 10px;">Buildless - deploy code directly to Kubernetes</ui5-title>
+<style>
+  .content,
+  .content-group {
+    display: flex;
+    flex-direction: column;
+    padding-block-end: 0.5rem;
+  }
 
-<ui5-tabcontainer>
-  <ui5-tab text="server.js" selected>
-    <ui5-label>Template</ui5-label>
-    <ui5-select id="template-dropdown">
-      <ui5-option value="express">Express application</ui5-option>
-      <ui5-option value="tcp">TCP echo server</ui5-option>
-    </ui5-select>
-    <ui5-button id="use-template-button">Use template</ui5-button>
-    <hey-monaco-editor language="javascript" style="height: 500px;" id="code-editor">
-    </hey-monaco-editor>
-  </ui5-tab>
-  <ui5-tab text="package.json">
-    <hey-monaco-editor language="json" style="height: 500px;" id="dependencies-editor"></hey-monaco-editor>
-  </ui5-tab>
-  <ui5-tab-separator></ui5-tab-separator>
-  <ui5-tab text="deployment.yaml">
-    <ui5-label>App name</ui5-label>
-    <ui5-input id="app-name-input" value="my-app"></ui5-input>
-    <ui5-label>Namespace</ui5-label>
-    <ui5-select id="namespace-dropdown">
-      <ui5-option value="default">default</ui5-option>
-    </ui5-select>
-    <ui5-button id="generate-button">Generate</ui5-button>
-    <ui5-button id="apply-button">Apply</ui5-button>
-    <hey-monaco-editor language="yaml" style="height: 500px;" id="deployment-editor"></hey-monaco-editor>
-  </ui5-tab>
-</ui5-tabcontainer>
+  .content-padding {
+    padding: 0.5rem 1rem 0 1rem;
+    box-sizing: border-box;
+  }
+</style>
+<ui5-panel id="buildless-cards">
+
+</ui5-panel>
+<ui5-panel>
+
+  <ui5-tabcontainer>
+    <ui5-tab text="server.js" selected>
+      <ui5-label>Template</ui5-label>
+      <ui5-select id="template-dropdown">
+        <ui5-option value="express">Express application</ui5-option>
+        <ui5-option value="tcp">TCP echo server</ui5-option>
+      </ui5-select>
+      <ui5-button id="use-template-button">Use template</ui5-button>
+      <hey-monaco-editor language="javascript" style="height: 500px;" id="code-editor">
+      </hey-monaco-editor>
+    </ui5-tab>
+    <ui5-tab text="package.json">
+      <hey-monaco-editor language="json" style="height: 500px;" id="dependencies-editor"></hey-monaco-editor>
+    </ui5-tab>
+    <ui5-tab-separator></ui5-tab-separator>
+    <ui5-tab text="deployment.yaml">
+      <ui5-label>App name</ui5-label>
+      <ui5-input id="app-name-input" value="my-app"></ui5-input>
+      <ui5-label>Namespace</ui5-label>
+      <ui5-select id="namespace-dropdown">
+        <ui5-option value="default">default</ui5-option>
+      </ui5-select>
+      <ui5-button id="generate-button">Generate</ui5-button>
+      <ui5-button id="apply-button">Apply</ui5-button>
+      <hey-monaco-editor language="yaml" style="height: 500px;" id="deployment-editor"></hey-monaco-editor>
+    </ui5-tab>
+  </ui5-tabcontainer>
+</ui5-panel>

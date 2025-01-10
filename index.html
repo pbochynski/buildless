@@ -15,12 +15,19 @@
       import '@ui5/webcomponents/dist/TabContainer.js';
       import '@ui5/webcomponents/dist/Tab.js';
       import '@ui5/webcomponents/dist/TabSeparator.js';
+      import "@ui5/webcomponents-fiori/dist/DynamicPage.js";
+      import "@ui5/webcomponents-fiori/dist/DynamicPageTitle.js";
+      import "@ui5/webcomponents-fiori/dist/DynamicPageHeader.js";
+      import "@ui5/webcomponents/dist/Card.js";
+      import "@ui5/webcomponents/dist/CardHeader.js";
     </script>
+    <link rel="stylesheet" href="./style.css">
+
     <script src="script.js" type="module"></script>
   </head>
   <body>
     <h2>Custom extension</h2>
-    <div id="container"></div>
+    <div id="container" class="content-scroll"></div>
 
     <script type="module">
       fetch('ui.html')
